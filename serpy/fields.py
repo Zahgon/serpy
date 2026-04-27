@@ -42,15 +42,11 @@ class Field(object):
 
         :param value: The value fetched from the object being serialized.
         """
-        return value
+        pass
     to_value._serpy_base_implementation = True
 
     def _is_to_value_overridden(self):
-        to_value = self.to_value
-        # If to_value isn't a method, it must have been overridden.
-        if not isinstance(to_value, types.MethodType):
-            return True
-        return not getattr(to_value, '_serpy_base_implementation', False)
+        pass
 
     def as_getter(self, serializer_field_name, serializer_cls):
         """Returns a function that fetches an attribute from an object.
@@ -73,7 +69,7 @@ class Field(object):
             on the serializer.
         :param serializer_cls: The :class:`Serializer` this field is a part of.
         """
-        return None
+        pass
 
 
 class StrField(Field):
@@ -126,7 +122,4 @@ class MethodField(Field):
         self.method = method
 
     def as_getter(self, serializer_field_name, serializer_cls):
-        method_name = self.method
-        if method_name is None:
-            method_name = 'get_{0}'.format(serializer_field_name)
-        return getattr(serializer_cls, method_name)
+        pass

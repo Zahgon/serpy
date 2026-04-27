@@ -8,40 +8,18 @@ class SerializerBase(Field):
 
 
 def _compile_field_to_tuple(field, name, serializer_cls):
-    getter = field.as_getter(name, serializer_cls)
-    if getter is None:
-        getter = serializer_cls.default_getter(field.attr or name)
-
-    # Only set a to_value function if it has been overridden for performance.
-    to_value = None
-    if field._is_to_value_overridden():
-        to_value = field.to_value
-
-    # Set the field name to a supplied label; defaults to the attribute name.
-    name = field.label or name
-
-    return (name, getter, to_value, field.call, field.required,
-            field.getter_takes_serializer)
+    pass
 
 
 class SerializerMeta(type):
 
     @staticmethod
     def _get_fields(direct_fields, serializer_cls):
-        field_map = {}
-        # Get all the fields from base classes.
-        for cls in serializer_cls.__mro__[::-1]:
-            if issubclass(cls, SerializerBase):
-                field_map.update(cls._field_map)
-        field_map.update(direct_fields)
-        return field_map
+        pass
 
     @staticmethod
     def _compile_fields(field_map, serializer_cls):
-        return [
-            _compile_field_to_tuple(field, name, serializer_cls)
-            for name, field in field_map.items()
-        ]
+        pass
 
     def __new__(cls, name, bases, attrs):
         # Fields declared directly on the class.
@@ -103,33 +81,10 @@ class Serializer(six.with_metaclass(SerializerMeta, SerializerBase)):
         self._data = None
 
     def _serialize(self, instance, fields):
-        v = {}
-        for name, getter, to_value, call, required, pass_self in fields:
-            if pass_self:
-                result = getter(self, instance)
-            else:
-                try:
-                    result = getter(instance)
-                except (KeyError, AttributeError):
-                    if required:
-                        raise
-                    else:
-                        continue
-                if required or result is not None:
-                    if call:
-                        result = result()
-                    if to_value:
-                        result = to_value(result)
-            v[name] = result
-
-        return v
+        pass
 
     def to_value(self, instance):
-        fields = self._compiled_fields
-        if self.many:
-            serialize = self._serialize
-            return [serialize(o, fields) for o in instance]
-        return self._serialize(instance, fields)
+        pass
 
     @property
     def data(self):
@@ -137,10 +92,7 @@ class Serializer(six.with_metaclass(SerializerMeta, SerializerBase)):
 
         The data will be cached for future accesses.
         """
-        # Cache the data for next time .data is called.
-        if self._data is None:
-            self._data = self.to_value(self.instance)
-        return self._data
+        pass
 
 
 class DictSerializer(Serializer):
